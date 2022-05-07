@@ -68,6 +68,7 @@ class auth extends Thread {
 			String name = dis.readUTF();
 			ClientHandler mtch = new ClientHandler(s, name, dis, dos);
 
+			
 			// Create a new Thread with this object.
 			Thread t = new Thread(mtch);
 

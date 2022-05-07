@@ -43,13 +43,25 @@ class ClientHandler extends Thread {
 
 	void message() {
 		String received;
+		String decoder = null;
 		String clients = "";
+		boolean a = false;
 		while (true) {
 			try {
+				decoder = null;
+				a = false;
 				// receive the string
 				received = dis.readUTF();
 				System.out.println(received);
-				//to change to another person.
+				// to change to another person.
+               
+				if (received.contains("#")) {
+					decoder = dis.readUTF();
+					System.out.println(decoder);
+					a = true;
+				}
+				
+
 				if (received.equals("show")) {
 					clients = "";
 					for (ClientHandler ch : Server.ar) {
@@ -83,7 +95,11 @@ class ClientHandler extends Thread {
 					// if the recipient is found, write on its
 					// output stream
 					if (mc.name.equals(recipient) && mc.isloggedin == true) {
-						mc.dos.writeUTF("[" + this.name + "] : " + MsgToSend);
+						String y = "[" + this.name + "] : " + MsgToSend;
+						mc.dos.writeUTF(y);
+						if (y.contains(" : ") || a) {
+							mc.dos.writeUTF(decoder);
+						}
 						break;
 					}
 				}
@@ -99,13 +115,12 @@ class ClientHandler extends Thread {
 					dis.close();
 					dos.close();
 					this.s.close();
-					
+
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 
-				}
-			 catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				System.exit(0);
 			}
